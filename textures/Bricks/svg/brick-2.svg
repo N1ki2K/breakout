@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="100" viewBox="0 0 360 100">
+<title>Golden amber inset brick</title>
+<defs>
+<linearGradient id="bevel" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#fff98a"/><stop offset=".2" stop-color="#ffbd00"/><stop offset=".7" stop-color="#ffbd00"/><stop offset="1" stop-color="#ab4b00"/></linearGradient>
+<linearGradient id="face" x1="0" y1="0" x2=".7" y2="1"><stop stop-color="#ffdc27"/><stop offset="1" stop-color="#ec7900"/></linearGradient>
+<linearGradient id="reflection" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff" stop-opacity=".75"/><stop offset=".55" stop-color="#fff" stop-opacity=".17"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+</defs>
+<rect x="1" y="1" width="358" height="98" rx="21" fill="#442002"/>
+<rect x="4" y="4" width="352" height="92" rx="18" fill="url(#bevel)"/>
+<path d="M24 6H336Q348 6 353 21L337 30 330 18H30L18 30 7 22Q11 6 24 6Z" fill="url(#reflection)"/>
+<path d="M5 76 18 69 30 82H330L343 69 355 78Q351 95 335 96H25Q10 96 5 76Z" fill="#ab4b00" opacity=".7"/>
+<path d="M24 7H336" fill="none" stroke="#fff98a" stroke-width="2" stroke-linecap="round"/>
+<rect x="16" y="14" width="328" height="72" rx="11" fill="#713304" stroke="#ffe969" stroke-width="1.5"/>
+<rect x="20" y="18" width="320" height="64" rx="9" fill="#d47700"/>
+<rect x="23" y="21" width="314" height="58" rx="7" fill="url(#face)" stroke="#ffce27" stroke-width="1.4"/>
+<path d="M31 23H329Q335 23 335 29Q192 57 25 73V29Q25 23 31 23Z" fill="url(#reflection)"/>
+<path d="M27 34v-5q0-5 6-5h294" fill="none" stroke="#fff8b2" stroke-width="1.5" opacity=".85"/>
+<ellipse cx="47" cy="28" rx="16" ry="4" transform="rotate(-12 47 28)" fill="#ffffe3" opacity=".75"/>
+</svg>
+

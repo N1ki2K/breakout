@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com .badlogic.gdx.utils.ScreenUtils;
 
 import io.github.breaking_bricks.BreakoutGame;
+import io.github.breaking_bricks.objects.Brick;
 
 public class GameOverScreen implements Screen{
 

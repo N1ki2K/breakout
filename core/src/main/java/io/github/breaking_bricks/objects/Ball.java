@@ -2,6 +2,7 @@ package io.github.breaking_bricks.objects;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.MathUtils;
 
 public class Ball {
     private float x;
@@ -11,14 +12,17 @@ public class Ball {
     private float dy;
 
     private float size;
+    private float speed;
 
     public Ball(){
         size = 16;
-        x = Gdx.graphics.getWidth() / 2;
-        y = Gdx.graphics.getHeight() /2;
+        speed = 250;
 
-        dx = 250;
-        dy = 250;
+        x = Gdx.graphics.getWidth() / 2f;
+        y = Gdx.graphics.getHeight() / 2f;
+
+        dx = speed;
+        dy = speed;
     }
 
     public void update(float delta){
@@ -38,6 +42,17 @@ public class Ball {
         }
 
     }
+
+    public void bounceFromPaddle(float hitPosition, float paddleVelocity){
+        dy = Math.abs(dy);
+
+        dx += hitPosition * 250;
+        dx += paddleVelocity * 0.15f;
+
+        dx = MathUtils.clamp(dx, -500, 500);
+
+    }
+
     public void bounceX(){
         dx = -dx;
     }
@@ -65,11 +80,18 @@ public class Ball {
         return dy;
     }
 
+    public void setY(float y){
+        this.y = y;
+    }
+
     public void reset(){
         x = Gdx.graphics.getWidth() / 2f;
         y = Gdx.graphics.getHeight() / 2f;
 
-        dx = 250;
-        dy = 250;
+        dx = speed;
+        dy = speed;
+    }
+    public void increaceSpeed(float amount){
+        speed += amount;
     }
 }

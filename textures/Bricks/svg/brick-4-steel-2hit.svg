@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="100" viewBox="0 0 360 100">
+  <title>Reinforced steel brick — two hits</title>
+  <defs>
+    <linearGradient id="steel-rim" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#c1d8e6"/><stop offset=".2" stop-color="#5e7c92"/><stop offset=".65" stop-color="#344c61"/><stop offset="1" stop-color="#142333"/></linearGradient>
+    <linearGradient id="steel-face" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#7997ad"/><stop offset=".22" stop-color="#536d83"/><stop offset=".7" stop-color="#2c4359"/><stop offset="1" stop-color="#4d6980"/></linearGradient>
+    <linearGradient id="steel-band" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#1b2b3a"/><stop offset=".16" stop-color="#a2bccb"/><stop offset=".36" stop-color="#506b81"/><stop offset=".8" stop-color="#35495c"/><stop offset="1" stop-color="#101e2d"/></linearGradient>
+    <linearGradient id="steel-light" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#b9fcff"/><stop offset=".35" stop-color="#37dcff"/><stop offset="1" stop-color="#008fce"/></linearGradient>
+    <linearGradient id="steel-gloss"><stop stop-color="#f4fbff" stop-opacity=".24"/><stop offset="1" stop-color="#f4fbff" stop-opacity="0"/></linearGradient>
+  </defs>
+  <rect x="1" y="1" width="358" height="98" rx="18" fill="#0a1522"/>
+  <rect x="4" y="4" width="352" height="92" rx="15" fill="url(#steel-rim)"/>
+  <path d="M24 15H336L346 25V75L336 85H24L14 75V25Z" fill="url(#steel-face)" stroke="#142637" stroke-width="2"/>
+  <path d="M25 17H335L341 23H20Z" fill="#e7f8ff" opacity=".35"/>
+  <path d="M20 26H340V39L20 64Z" fill="url(#steel-gloss)"/>
+  <path d="M21 80H339" stroke="#9dbace" opacity=".45"/>
+  <g fill="url(#steel-band)" stroke="#0e1e2b" stroke-width="1.5">
+    <path d="M58 5H84V95H58L53 84V16Z"/>
+    <path d="M276 5H302L307 16V84L302 95H276Z"/>
+  </g>
+  <path d="M59 12v76m219-76v76" stroke="#d6e8f2" opacity=".42"/>
+  <g fill="#132433" stroke="#94aebf" stroke-width="1">
+    <circle cx="70" cy="18" r="4"/><circle cx="70" cy="82" r="4"/>
+    <circle cx="289" cy="18" r="4"/><circle cx="289" cy="82" r="4"/>
+  </g>
+  <path d="M68 18h4m-4 64h4m215-64h4m-4 64h4" stroke="#bdd4e2"/>
+  <rect x="127" y="32" width="106" height="36" rx="9" fill="#142537" stroke="#7b9aad" stroke-width="1"/>
+  <g id="hit-indicators" fill="url(#steel-light)" stroke="#85f0ff" stroke-width=".7">
+    <rect id="hit-1" x="139" y="42" width="34" height="16" rx="3"/>
+    <rect id="hit-2" x="187" y="42" width="34" height="16" rx="3"/>
+  </g>
+  <path d="M23 35v30m314-30v30" stroke="#35d5f1" stroke-width="2" opacity=".65"/>
+</svg>

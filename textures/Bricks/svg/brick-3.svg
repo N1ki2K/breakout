@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="100" viewBox="0 0 360 100">
+<title>Blue three-panel brick</title>
+<defs>
+<linearGradient id="bevel" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#94f5ff"/><stop offset=".2" stop-color="#0ac4fb"/><stop offset=".7" stop-color="#0ac4fb"/><stop offset="1" stop-color="#004da9"/></linearGradient>
+<linearGradient id="face" x1="0" y1="0" x2=".7" y2="1"><stop stop-color="#29cefa"/><stop offset="1" stop-color="#0069dd"/></linearGradient>
+<linearGradient id="reflection" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff" stop-opacity=".75"/><stop offset=".55" stop-color="#fff" stop-opacity=".17"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+</defs>
+<rect x="1" y="1" width="358" height="98" rx="21" fill="#041933"/>
+
+<rect x="5" y="5" width="114" height="90" rx="12" fill="url(#bevel)" stroke="#0271ba"/>
+<rect x="11" y="13" width="102" height="75" rx="9" fill="url(#face)" stroke="#3fe0ff" stroke-width="1"/>
+<path d="M17 10h91l-5 7h-78q-8 0-11 8l-5-5q3-10 10-10Z" fill="url(#reflection)"/>
+<path d="M13 75v-49q0-12 12-12" fill="none" stroke="#adf7ff" stroke-width="1.7" opacity=".7"/>
+<ellipse cx="20" cy="15" rx="6" ry="3" transform="rotate(-32 20 15)" fill="white" opacity=".8"/>
+<rect x="123" y="5" width="114" height="90" rx="12" fill="url(#bevel)" stroke="#0271ba"/>
+<rect x="129" y="13" width="102" height="75" rx="9" fill="url(#face)" stroke="#3fe0ff" stroke-width="1"/>
+<path d="M135 10h91l-5 7h-78q-8 0-11 8l-5-5q3-10 10-10Z" fill="url(#reflection)"/>
+<path d="M131 75v-49q0-12 12-12" fill="none" stroke="#adf7ff" stroke-width="1.7" opacity=".7"/>
+<ellipse cx="138" cy="15" rx="6" ry="3" transform="rotate(-32 138 15)" fill="white" opacity=".8"/>
+<rect x="241" y="5" width="114" height="90" rx="12" fill="url(#bevel)" stroke="#0271ba"/>
+<rect x="247" y="13" width="102" height="75" rx="9" fill="url(#face)" stroke="#3fe0ff" stroke-width="1"/>
+<path d="M253 10h91l-5 7h-78q-8 0-11 8l-5-5q3-10 10-10Z" fill="url(#reflection)"/>
+<path d="M249 75v-49q0-12 12-12" fill="none" stroke="#adf7ff" stroke-width="1.7" opacity=".7"/>
+<ellipse cx="256" cy="15" rx="6" ry="3" transform="rotate(-32 256 15)" fill="white" opacity=".8"/>
+</svg>
+

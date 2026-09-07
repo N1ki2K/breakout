@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128">
+  <title>Pearl silver arcade ball</title>
+  <defs>
+    <radialGradient id="rim" cx="36%" cy="28%" r="75%">
+      <stop stop-color="#f4f9ff"/><stop offset=".7" stop-color="#c9d4e3"/><stop offset=".88" stop-color="#f4f8ff"/><stop offset="1" stop-color="#384353"/>
+    </radialGradient>
+    <radialGradient id="pearl" cx="33%" cy="27%" r="78%">
+      <stop stop-color="#fff"/><stop offset=".3" stop-color="#f6f7fa"/><stop offset=".62" stop-color="#dce0e8"/><stop offset=".84" stop-color="#a2acbd"/><stop offset="1" stop-color="#dbe3ef"/>
+    </radialGradient>
+    <linearGradient id="edge" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#fff" stop-opacity=".95"/><stop offset=".48" stop-color="#fff" stop-opacity=".15"/><stop offset="1" stop-color="#f8fbff" stop-opacity=".8"/>
+    </linearGradient>
+  </defs>
+  <circle cx="64" cy="64" r="63" fill="url(#rim)" stroke="#192231" stroke-width="2"/>
+  <circle cx="64" cy="64" r="59" fill="url(#pearl)"/>
+  <circle cx="64" cy="64" r="60" fill="none" stroke="url(#edge)" stroke-width="1.7"/>
+  <ellipse cx="35" cy="27" rx="17" ry="8" transform="rotate(-42 35 27)" fill="#fff" opacity=".9"/>
+  <ellipse cx="38" cy="41" rx="4.5" ry="3" transform="rotate(-42 38 41)" fill="#fff" opacity=".78"/>
+  <path d="M18 73C20 98 41 116 64 118" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" opacity=".38"/>
+</svg>
