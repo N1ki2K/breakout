@@ -3,171 +3,209 @@ package io.github.breaking_bricks.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 
 import io.github.breaking_bricks.BreakoutGame;
-
-import static java.awt.SystemColor.text;
+import io.github.breaking_bricks.GameConfig;
 
 public class StartScreen implements Screen {
 
     private final BreakoutGame game;
 
+    private final OrthographicCamera camera;
+    private final FitViewport viewport;
+
     private final SpriteBatch batch;
-    private final ShapeRenderer shapeRenderer;
+
+    private final Texture background;
 
     private final BitmapFont titleFont;
-    private final BitmapFont font;
+    private final BitmapFont textFont;
 
     private final GlyphLayout layout;
-
-    private final Rectangle playButton;
 
     public StartScreen(BreakoutGame game) {
         this.game = game;
 
-        batch = new SpriteBatch();
-        shapeRenderer = new ShapeRenderer();
+        camera = new OrthographicCamera();
 
-        titleFont = new BitmapFont();
-        font = new BitmapFont();
+        viewport = new FitViewport(
+            GameConfig.WORLD_WIDTH,
+            GameConfig.WORLD_HEIGHT,
+            camera
+        );
+
+        batch = new SpriteBatch();
+
+        background = new Texture(
+            Gdx.files.internal("textures/screen_bg/png/start.png")
+        );
+
+        background.setFilter(
+            Texture.TextureFilter.Linear,
+            Texture.TextureFilter.Linear
+        );
+
+        FreeTypeFontGenerator titleGenerator =
+            new FreeTypeFontGenerator(
+                Gdx.files.internal("fonts/Inter_28pt-Regular.ttf")
+            );
+
+        FreeTypeFontGenerator.FreeTypeFontParameter titleParameter =
+            new FreeTypeFontGenerator.FreeTypeFontParameter();
+
+        titleParameter.size = 70;
+
+        titleFont = titleGenerator.generateFont(titleParameter);
+
+        titleGenerator.dispose();
+
+
+        FreeTypeFontGenerator textGenerator =
+            new FreeTypeFontGenerator(
+                Gdx.files.internal("fonts/Inter_18pt-Regular.ttf")
+            );
+
+        FreeTypeFontGenerator.FreeTypeFontParameter textParameter =
+            new FreeTypeFontGenerator.FreeTypeFontParameter();
+
+        textParameter.size = 36;
+
+        textFont = textGenerator.generateFont(textParameter);
+
+        textGenerator.dispose();
+
+
+        titleFont.getRegion().getTexture().setFilter(
+            Texture.TextureFilter.Linear,
+            Texture.TextureFilter.Linear
+        );
+
+        textFont.getRegion().getTexture().setFilter(
+            Texture.TextureFilter.Linear,
+            Texture.TextureFilter.Linear
+        );
 
         layout = new GlyphLayout();
-
-        float buttonWidth = 220;
-        float buttonHight = 60;
-
-        playButton = new Rectangle(
-            Gdx.graphics.getWidth() / 2f - 20,
-            Gdx.graphics.getHeight() / 2f - buttonWidth / 2f,
-            buttonWidth,
-            buttonHight
-
-        );
     }
 
     @Override
     public void render(float delta) {
-        ScreenUtils.clear(0.1f, 0.1f, 0.1f, 1);
+        ScreenUtils.clear(0, 0, 0, 1);
 
-        hadnleInput();
+        viewport.apply();
 
-        drawMenu();
+        batch.setProjectionMatrix(camera.combined);
+
+        handleInput();
+
+        drawScreen();
     }
 
-    private void hadnleInput() {
+    private void handleInput() {
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
             game.setScreen(new GameScreen(game));
             return;
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
-
             Gdx.app.exit();
-        }
-
-        float mouseX = Gdx.input.getX();
-        float mouseY = Gdx.graphics.getHeight() - Gdx.input.getY();
-
-        if (Gdx.input.justTouched() && playButton.contains(mouseX, mouseY)) {
-            game.setScreen((new GameScreen(game)));
         }
     }
 
-    public void drawMenu() {
-        float mouseX = Gdx.input.getX();
-        float mouseY = Gdx.graphics.getHeight() - Gdx.input.getY();
-
-        boolean hovering = playButton.contains(mouseX, mouseY);
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-
-        if (hovering) {
-            shapeRenderer.setColor(Color.CYAN);
-        } else {
-            shapeRenderer.setColor(Color.DARK_GRAY);
-        }
-        shapeRenderer.rect(
-            playButton.x,
-            playButton.y,
-            playButton.width,
-            playButton.height
-        );
-        shapeRenderer.end();
-        
+    private void drawScreen() {
         batch.begin();
 
-        drawCentered(
+        batch.draw(
+            background,
+            0,
+            0,
+            GameConfig.WORLD_WIDTH,
+            GameConfig.WORLD_HEIGHT
+        );
+
+        drawCenteredText(
             titleFont,
             "BREAKOUT",
-            Gdx.graphics.getHeight() - 150
+            104
         );
 
-        drawCentered(
-            font,
-            "PLAY",
-            playButton.y + 38
+        drawCenteredText(
+            textFont,
+            "Press SPACE to start",
+            300
         );
 
-        drawCentered(
-            font,
-            "A / D - Move",
-            Gdx.graphics.getHeight() / 2f - 120
-        );
-
-        drawCentered(
-            font,
-            "P - Pause",
-            Gdx.graphics.getHeight() / 2f - 155
-        );
-
-        drawCentered(
-            font,
-            "SPACE - Start",
-            Gdx.graphics.getHeight() / 2f - 190
-        );
-
-        drawCentered(
-            font,
-            "ESC - Quit",
-            Gdx.graphics.getHeight() / 2f - 255
+        drawCenteredText(
+            textFont,
+            "Press A or D to move",
+            436
         );
 
         batch.end();
     }
 
-    private void drawCentered(BitmapFont font, String text, float y) {
-
+    private void drawCenteredText(
+        BitmapFont font,
+        String text,
+        float figmaY
+    ) {
         layout.setText(font, text);
 
-        float x = (Gdx.graphics.getWidth() - layout.width) / 2;
+        float x =
+            (GameConfig.WORLD_WIDTH - layout.width) / 2f;
 
-        font.draw(batch, text, x, y);
+        float y =
+            GameConfig.WORLD_HEIGHT
+                - (figmaY / 600f)
+                * GameConfig.WORLD_HEIGHT;
 
+        font.draw(
+            batch,
+            layout,
+            x,
+            y
+        );
     }
 
-
+    @Override
+    public void resize(int width, int height) {
+        viewport.update(
+            width,
+            height,
+            true
+        );
+    }
 
     @Override
-    public void show(){}
+    public void show() {
+    }
 
     @Override
-    public void resize(int width, int hight){}
+    public void pause() {
+    }
 
     @Override
-    public void pause(){}
+    public void resume() {
+    }
 
     @Override
-    public void resume(){}
+    public void hide() {
+    }
 
     @Override
-    public void dispose(){}
+    public void dispose() {
+        background.dispose();
+        batch.dispose();
 
-    @Override
-    public void hide(){}
+        titleFont.dispose();
+        textFont.dispose();
+    }
 }

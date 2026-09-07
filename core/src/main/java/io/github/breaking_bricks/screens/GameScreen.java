@@ -1,5 +1,6 @@
 package io.github.breaking_bricks.screens;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.utils.ScreenUtils;
@@ -9,6 +10,11 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+
+import io.github.breaking_bricks.GameConfig;
 
 import io.github.breaking_bricks.objects.Brick;
 import io.github.breaking_bricks.BreakoutGame;
@@ -26,12 +32,40 @@ public class GameScreen implements Screen {
     private BitmapFont font;
     private SpriteBatch batch;
 
+    private final OrthographicCamera camera;
+    private final FitViewport viewport;
+
+    private final Texture background;
+
+    private final Texture paddleTexture;
+
     private int score;
     private int lives;
     private int level;
 
     public GameScreen(BreakoutGame game){
         this.game = game;
+
+        camera = new OrthographicCamera();
+
+        viewport = new FitViewport(GameConfig.WORLD_WIDTH, GameConfig.WORLD_HEIGHT, camera);
+
+        background = new Texture(Gdx.files.internal("textures/screen_bg/png/game_screen.png"));
+
+        paddleTexture = new Texture(
+            Gdx.files.internal("textures/paddle/png/paddle.png")
+        );
+
+        paddleTexture.setFilter(
+            Texture.TextureFilter.Linear,
+            Texture.TextureFilter.Linear
+        );
+
+        background.setFilter(
+            Texture.TextureFilter.Linear,
+            Texture.TextureFilter.Linear
+        );
+
         paddle = new Paddle();
         ball = new Ball();
         bricks = new Array<>();
@@ -49,6 +83,11 @@ public class GameScreen implements Screen {
 
         @Override
     public void render(float delta){
+
+            viewport.apply();
+
+            batch.setProjectionMatrix(camera.combined);
+            shapeRenderer.setProjectionMatrix(camera.combined);
 
        if(Gdx.input.isKeyJustPressed(Input.Keys.P)){
            game.setScreen(new PauseScreen(game, this));
@@ -100,14 +139,12 @@ public class GameScreen implements Screen {
                 paddle.getVelocityX()
             );
         }
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
 
-        shapeRenderer.rect(
-            paddle.getX(),
-            paddle.getY(),
-            paddle.getWidth(),
-            paddle.getHight()
-        );
+        batch.begin();
+        batch.draw(background, 0, 0, GameConfig.WORLD_WIDTH, GameConfig.WORLD_HEIGHT);
+        batch.end();
+
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
 
         shapeRenderer.rect(
             ball.getX(),
@@ -142,18 +179,29 @@ public class GameScreen implements Screen {
 
         batch.begin();
 
+            batch.draw(
+                paddleTexture,
+                paddle.getX(),
+                paddle.getY(),
+                paddle.getWidth(),
+                paddle.getHight()
+            );
+            batch.end();
+
+        batch.begin();
+
         font.draw(batch,
             "Score: " + score,
-            20, Gdx.graphics.getHeight() - 20);
+            20, GameConfig.WORLD_HEIGHT - 20);
 
         font.draw(batch,
             "Lives: " + lives,
-            Gdx.graphics.getWidth() - 100, Gdx.graphics.getHeight() - 20);
+            GameConfig.WORLD_WIDTH - 100, GameConfig.WORLD_HEIGHT - 20);
 
         font.draw(batch,
             "Level: " + level,
-            Gdx.graphics.getWidth() / 2 -30,
-            Gdx.graphics.getHeight() -20);
+            GameConfig.WORLD_WIDTH / 2 -30,
+            GameConfig.WORLD_HEIGHT -20);
         batch.end();
 
         if(allBricksDestroyed()){
@@ -218,12 +266,12 @@ public class GameScreen implements Screen {
         float totalWidth =
             columns * brickWidth + (columns - 1) * gap;
 
-        float availableWidht = Gdx.graphics.getWidth() - margin * 2 - gap * (columns -1 );
+        float availableWidht = GameConfig.WORLD_WIDTH - margin * 2 - gap * (columns -1 );
 
        brickWidth = availableWidht / columns;
 
        float startX = margin;
-        float startY = Gdx.graphics.getHeight() - 100;
+        float startY = GameConfig.WORLD_HEIGHT - 100;
 
         for(int row = 0; row < rows; row++){
 
@@ -288,7 +336,9 @@ public class GameScreen implements Screen {
     public void show(){}
 
     @Override
-    public void resize(int width, int hight){}
+    public void resize(int width, int height){
+        viewport.update(width, height, true);
+    }
 
     @Override
     public void pause(){}
@@ -297,9 +347,11 @@ public class GameScreen implements Screen {
     public void resume(){}
     @Override
     public void dispose(){
+        background.dispose();
         shapeRenderer.dispose();
         batch.dispose();
         font.dispose();
+        paddleTexture.dispose();
     }
 
     @Override
