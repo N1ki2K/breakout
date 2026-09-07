@@ -36,12 +36,19 @@ public class GameScreen implements Screen {
     private final FitViewport viewport;
 
     private final Texture background;
-
     private final Texture paddleTexture;
+    private final Texture ballTexture;
+
+    private final Texture brickTexture1;
+    private final Texture brickTexture2;
+    private final Texture brickTexture3;
+    private final Texture brickTexture4;
+    private final Texture brickTexture5;
 
     private int score;
     private int lives;
     private int level;
+
 
     public GameScreen(BreakoutGame game){
         this.game = game;
@@ -50,8 +57,15 @@ public class GameScreen implements Screen {
 
         viewport = new FitViewport(GameConfig.WORLD_WIDTH, GameConfig.WORLD_HEIGHT, camera);
 
+        brickTexture1 = new Texture(Gdx.files.internal("textures/bricks/png/brick1.png"));
+        brickTexture2 = new Texture(Gdx.files.internal("textures/bricks/png/brick2.png"));
+        brickTexture3 = new Texture(Gdx.files.internal("textures/bricks/png/brick3.png"));
+        brickTexture4 = new Texture(Gdx.files.internal("textures/bricks/png/brick4.png"));
+        brickTexture5 = new Texture(Gdx.files.internal("textures/bricks/png/brick5.png"));
+
         background = new Texture(Gdx.files.internal("textures/screen_bg/png/game_screen.png"));
 
+        ballTexture = new Texture(Gdx.files.internal("textures/ball/png/ball.png"));
         paddleTexture = new Texture(
             Gdx.files.internal("textures/paddle/png/paddle.png")
         );
@@ -66,6 +80,36 @@ public class GameScreen implements Screen {
             Texture.TextureFilter.Linear
         );
 
+        ballTexture.setFilter(
+            Texture.TextureFilter.Linear,
+            Texture.TextureFilter.Linear
+        );
+
+        brickTexture1.setFilter(
+            Texture.TextureFilter.Linear,
+            Texture.TextureFilter.Linear
+        );
+
+        brickTexture2.setFilter(
+            Texture.TextureFilter.Linear,
+            Texture.TextureFilter.Linear
+        );
+
+        brickTexture3.setFilter(
+            Texture.TextureFilter.Linear,
+            Texture.TextureFilter.Linear
+        );
+
+        brickTexture4.setFilter(
+            Texture.TextureFilter.Linear,
+            Texture.TextureFilter.Linear
+        );
+
+        brickTexture5.setFilter(
+            Texture.TextureFilter.Linear,
+            Texture.TextureFilter.Linear
+        );
+
         paddle = new Paddle();
         ball = new Ball();
         bricks = new Array<>();
@@ -76,9 +120,21 @@ public class GameScreen implements Screen {
 
         score = 0;
         lives = 3;
-        level = 1;
+        level = 2;
 
         createBricks();
+    }
+
+
+    private Texture getBrickTexture(Brick brick){
+        return switch (brick.getTextureType()){
+            case 1 -> brickTexture5;
+            case 2 -> brickTexture4;
+            case 3 -> brickTexture3;
+            case 4 -> brickTexture2;
+            case 5 -> brickTexture1;
+            default -> brickTexture5;
+        };
     }
 
         @Override
@@ -146,38 +202,21 @@ public class GameScreen implements Screen {
 
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
 
-        shapeRenderer.rect(
-            ball.getX(),
-            ball.getY(),
-            ball.getSize(),
-            ball.getSize()
-        );
+        shapeRenderer.end();
+
+        batch.begin();
 
         for(Brick brick : bricks){
             if (!brick.isDestroyed()){
-
-                if(brick.getHitsRemaining() == 3){
-                    shapeRenderer.setColor(Color.DARK_GRAY);
-                } else if (brick.getHitsRemaining() == 2) {
-                    shapeRenderer.setColor(Color.GRAY);
-                } else{
-                    shapeRenderer.setColor(brick.getColor());
-                }
-
-
-                shapeRenderer.rect(
+                batch.draw(
+                    getBrickTexture(brick),
                     brick.getX(),
                     brick.getY(),
                     brick.getWidth(),
                     brick.getHeight()
                 );
-
-                shapeRenderer.setColor(Color.WHITE);
             }
         }
-        shapeRenderer.end();
-
-        batch.begin();
 
             batch.draw(
                 paddleTexture,
@@ -185,6 +224,14 @@ public class GameScreen implements Screen {
                 paddle.getY(),
                 paddle.getWidth(),
                 paddle.getHight()
+            );
+
+            batch.draw(
+              ballTexture,
+              ball.getX(),
+              ball.getY(),
+              ball.getSize(),
+              ball.getSize()
             );
             batch.end();
 
@@ -235,6 +282,13 @@ public class GameScreen implements Screen {
 
     public void createBricks(){
 
+        float brickHeight = 40;
+
+        int columns = 10;
+
+        float margin = 100;
+        float gap = 12;
+
         int rows = switch (level){
         case 1 -> 3;
         case 2 -> 4;
@@ -242,38 +296,18 @@ public class GameScreen implements Screen {
         default -> 3;
         };
 
-        int columns = 10;
-        switch (level) {
-            case 1:
-                rows = 3;
+        float availableWidth = GameConfig.WORLD_WIDTH - margin * 2 - gap * (columns - 1);
+        float brickWidth = availableWidth / columns;
 
-                break;
-            case 2:
-                rows = 4;
-                break;
-            case 3:
-                rows =5;
-                break;
-        }
-
-        float brickWidth = 60;
-
-        float brickHeight = 20;
-
-        float margin = 30;
-        float gap = 8;
+        float startX = margin;
+        float startY = GameConfig.WORLD_HEIGHT - 150;
 
         float totalWidth =
             columns * brickWidth + (columns - 1) * gap;
 
-        float availableWidht = GameConfig.WORLD_WIDTH - margin * 2 - gap * (columns -1 );
-
-       brickWidth = availableWidht / columns;
-
-       float startX = margin;
-        float startY = GameConfig.WORLD_HEIGHT - 100;
-
         for(int row = 0; row < rows; row++){
+
+            int textureType = row + 1;
 
             int hitReqired = 1;
 
@@ -299,7 +333,7 @@ public class GameScreen implements Screen {
                 boolean createBrick = switch (level){
                     case 1 -> true;
                     case 2 -> (row + column) % 2 == 0;
-                    case 3 -> column >= row && columns < columns - row;
+                    case 3 -> column >= row && column < columns - row;
                     default -> true;
                 };
                 if(!createBrick){
@@ -309,16 +343,11 @@ public class GameScreen implements Screen {
                 float x = startX + column * (brickWidth + gap);
                 float y = startY - row * (brickHeight + gap);
 
-                Color color = switch (row){
-                    case 0 -> Color.RED;
-                    case 1 -> Color.GREEN;
-                    case 2 -> Color.MAGENTA;
-                    case 3 -> Color.GREEN;
-                    case 4 -> Color.BLACK;
-                    default -> Color.BLUE;
-                };
-
-                bricks.add(new Brick(x, y, brickWidth, brickHeight, color, hitReqired));
+                bricks.add(
+                    new Brick(
+                      x, y, brickWidth, brickHeight, hitReqired, textureType
+                    )
+                );
             }
         }
     }
@@ -352,6 +381,12 @@ public class GameScreen implements Screen {
         batch.dispose();
         font.dispose();
         paddleTexture.dispose();
+        ballTexture.dispose();
+        brickTexture1.dispose();
+        brickTexture2.dispose();
+        brickTexture3.dispose();
+        brickTexture4.dispose();
+        brickTexture5.dispose();
     }
 
     @Override

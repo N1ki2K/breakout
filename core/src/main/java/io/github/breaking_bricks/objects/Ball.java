@@ -1,8 +1,10 @@
 package io.github.breaking_bricks.objects;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.MathUtils;
+import io.github.breaking_bricks.GameConfig;
 
 public class Ball {
     private float x;
@@ -18,8 +20,8 @@ public class Ball {
         size = 16;
         speed = 250;
 
-        x = Gdx.graphics.getWidth() / 2f;
-        y = Gdx.graphics.getHeight() / 2f;
+        x = GameConfig.WORLD_WIDTH / 2f;
+        y = GameConfig.WORLD_HEIGHT / 2f;
 
         dx = speed;
         dy = speed;
@@ -32,12 +34,12 @@ public class Ball {
         if(x <= 0){
             bounceX();
         }
-        if(x + size >= Gdx.graphics.getWidth()){
-            x = Gdx.graphics.getWidth() - size;
+        if(x + size >= GameConfig.WORLD_WIDTH){
+            x = GameConfig.WORLD_WIDTH - size;
             bounceX();
         }
-        if(y + size >= Gdx.graphics.getHeight()){
-            y = Gdx.graphics.getHeight() - size;
+        if(y + size >= GameConfig.WORLD_HEIGHT){
+            y = GameConfig.WORLD_HEIGHT - size;
             bounceY();
         }
 
@@ -85,8 +87,8 @@ public class Ball {
     }
 
     public void reset(){
-        x = Gdx.graphics.getWidth() / 2f;
-        y = Gdx.graphics.getHeight() / 2f;
+        x = GameConfig.WORLD_WIDTH / 2f;
+        y = GameConfig.WORLD_HEIGHT / 2f;
 
         dx = speed;
         dy = speed;

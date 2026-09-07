@@ -9,57 +9,61 @@ public class Brick {
     private float y;
     private float width;
     private float height;
-    private Color color;
     private int hitsRemaining;
+    private int textureType;
 
     private boolean destroyed;
 
-    public Brick(float x, float y, float width, float height, Color color, int hitsRemaining){
+    public Brick(float x, float y, float width, float height, int hitsRemaining, int textureType) {
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
-        this.color = color;
 
+        this.textureType = textureType;
         this.hitsRemaining = hitsRemaining;
         this.destroyed = false;
     }
 
-    public void hit(){
+    public void hit() {
         hitsRemaining--;
 
-        if(hitsRemaining <= 0){
+        if (hitsRemaining <= 0) {
             destroyed = true;
         }
     }
-    public int getHitsRemaining(){
+
+    public int getHitsRemaining() {
         return hitsRemaining;
     }
 
-    public boolean isDestroyed(){
+    public boolean isDestroyed() {
         return destroyed;
     }
 
-    public Rectangle getBounds(){
+    public Rectangle getBounds() {
         return new Rectangle(x, y, width, height);
     }
 
-    public Color getColor(){return  color;}
-
-    public float getX(){
+    public float getX() {
         return x;
     }
 
-    public float getY(){
+    public float getY() {
         return y;
     }
 
-    public float getWidth(){
+    public float getWidth() {
         return width;
     }
 
-    public float getHeight(){
+    public float getHeight() {
         return height;
-    }}
+    }
+
+    public int getTextureType() {
+        return textureType;
+    }
+}
 
 
