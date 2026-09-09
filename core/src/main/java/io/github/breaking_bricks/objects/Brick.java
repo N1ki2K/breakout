@@ -1,7 +1,6 @@
 package io.github.breaking_bricks.objects;
 
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.graphics.Color;
 
 public class Brick {
 
@@ -9,32 +8,44 @@ public class Brick {
     private float y;
     private float width;
     private float height;
-    private int hitsRemaining;
+
     private int textureType;
 
     private boolean destroyed;
 
-    public Brick(float x, float y, float width, float height, int hitsRemaining, int textureType) {
+    public Brick(
+        float x,
+        float y,
+        float width,
+        float height,
+        int textureType
+    ) {
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
 
         this.textureType = textureType;
-        this.hitsRemaining = hitsRemaining;
-        this.destroyed = false;
+
+        destroyed = false;
     }
 
     public void hit() {
-        hitsRemaining--;
 
-        if (hitsRemaining <= 0) {
-            destroyed = true;
+        switch (textureType) {
+
+            case 5:
+                textureType = 4;
+                break;
+
+            case 4:
+                textureType = 3;
+                break;
+
+            default:
+                destroyed = true;
+                break;
         }
-    }
-
-    public int getHitsRemaining() {
-        return hitsRemaining;
     }
 
     public boolean isDestroyed() {
@@ -42,7 +53,12 @@ public class Brick {
     }
 
     public Rectangle getBounds() {
-        return new Rectangle(x, y, width, height);
+        return new Rectangle(
+            x,
+            y,
+            width,
+            height
+        );
     }
 
     public float getX() {
@@ -65,5 +81,3 @@ public class Brick {
         return textureType;
     }
 }
-
-

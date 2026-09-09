@@ -1,84 +1,90 @@
 package io.github.breaking_bricks.objects;
 
-
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.graphics.Texture;
 
 import io.github.breaking_bricks.GameConfig;
 
 public class Paddle {
+
     private float x;
     private float y;
+
     private float width;
     private float hight;
+
     private float speed;
     private float velocityX;
-    private final Texture paddleTexture;
-    public Paddle(){
 
-        paddleTexture = new Texture(
-            Gdx.files.internal("textures/paddle/png/paddle.png")
-        );
-
-        paddleTexture.setFilter(
-            Texture.TextureFilter.Linear,
-            Texture.TextureFilter.Linear
-        );
+    public Paddle() {
 
         width = 120;
         hight = 20;
+
         speed = 500;
         velocityX = 0;
 
-        x = (GameConfig.WORLD_WIDTH - width) / 2;
-        y = 40;
+        x = GameConfig.WALL_LEFT
+            + (
+            GameConfig.WALL_RIGHT
+                - GameConfig.WALL_LEFT
+                - width
+        ) / 2f;
+
+        y = GameConfig.MISS_Y + 30;
     }
 
-    public void moveLeft(float delta){
+    public void moveLeft(float delta) {
+
         velocityX = -speed;
 
         x += velocityX * delta;
 
-        if (x < 0){
-            x = 0;
+        if (x < GameConfig.WALL_LEFT) {
+            x = GameConfig.WALL_LEFT;
         }
     }
 
     public void moveRight(float delta) {
 
-       velocityX = speed;
+        velocityX = speed;
+
         x += velocityX * delta;
-        if (x + width > GameConfig.WORLD_WIDTH) {
-            x = GameConfig.WORLD_WIDTH - width;
+
+        if (x + width > GameConfig.WALL_RIGHT) {
+            x = GameConfig.WALL_RIGHT - width;
         }
     }
 
-    public void stop(){
+    public void stop() {
         velocityX = 0;
     }
 
-    public float getVelocityX(){
+    public float getVelocityX() {
         return velocityX;
     }
 
-    public Rectangle getBounds(){
-        return new Rectangle(x, y, width, hight);
-        }
+    public Rectangle getBounds() {
+        return new Rectangle(
+            x,
+            y,
+            width,
+            hight
+        );
+    }
 
-    public float getX(){
+    public float getX() {
         return x;
-        }
+    }
 
-    public float getY(){
+    public float getY() {
         return y;
-        }
+    }
 
-    public float getWidth(){
+    public float getWidth() {
         return width;
     }
 
-    public float getHight(){
+    public float getHight() {
         return hight;
-        }
     }
+}

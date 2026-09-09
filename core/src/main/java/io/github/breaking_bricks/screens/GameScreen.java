@@ -9,10 +9,10 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 
 import io.github.breaking_bricks.GameConfig;
 
@@ -28,12 +28,13 @@ public class GameScreen implements Screen {
     private Ball ball;
     private Array<Brick> bricks;
     private ShapeRenderer shapeRenderer;
+    private GlyphLayout hudLayout;
 
     private BitmapFont font;
     private SpriteBatch batch;
 
     private final OrthographicCamera camera;
-    private final FitViewport viewport;
+    private final StretchViewport viewport;
 
     private final Texture background;
     private final Texture paddleTexture;
@@ -49,19 +50,22 @@ public class GameScreen implements Screen {
     private int lives;
     private int level;
 
+    private ShapeRenderer debugRenderer;
+
 
     public GameScreen(BreakoutGame game){
         this.game = game;
 
         camera = new OrthographicCamera();
 
-        viewport = new FitViewport(GameConfig.WORLD_WIDTH, GameConfig.WORLD_HEIGHT, camera);
+        viewport = new StretchViewport(GameConfig.WORLD_WIDTH, GameConfig.WORLD_HEIGHT, camera);
+        hudLayout = new GlyphLayout();
 
-        brickTexture1 = new Texture(Gdx.files.internal("textures/bricks/png/brick1.png"));
-        brickTexture2 = new Texture(Gdx.files.internal("textures/bricks/png/brick2.png"));
+        brickTexture1 = new Texture(Gdx.files.internal("textures/bricks/png/brick5.png"));
+        brickTexture2 = new Texture(Gdx.files.internal("textures/bricks/png/brick4.png"));
         brickTexture3 = new Texture(Gdx.files.internal("textures/bricks/png/brick3.png"));
-        brickTexture4 = new Texture(Gdx.files.internal("textures/bricks/png/brick4.png"));
-        brickTexture5 = new Texture(Gdx.files.internal("textures/bricks/png/brick5.png"));
+        brickTexture4 = new Texture(Gdx.files.internal("textures/bricks/png/brick2.png"));
+        brickTexture5 = new Texture(Gdx.files.internal("textures/bricks/png/brick1.png"));
 
         background = new Texture(Gdx.files.internal("textures/screen_bg/png/game_screen.png"));
 
@@ -120,9 +124,11 @@ public class GameScreen implements Screen {
 
         score = 0;
         lives = 3;
-        level = 2;
+        level = 1;
 
         createBricks();
+
+        debugRenderer = new ShapeRenderer();
     }
 
 
@@ -143,7 +149,10 @@ public class GameScreen implements Screen {
             viewport.apply();
 
             batch.setProjectionMatrix(camera.combined);
+            debugRenderer.setProjectionMatrix(camera.combined);
+
             shapeRenderer.setProjectionMatrix(camera.combined);
+
 
        if(Gdx.input.isKeyJustPressed(Input.Keys.P)){
            game.setScreen(new PauseScreen(game, this));
@@ -162,7 +171,7 @@ public class GameScreen implements Screen {
             }
         }
         if (lives <= 0) {
-            game.setScreen(new GameOverScreen(game));
+            game.setScreen(new GameOverScreen(game, score));
             return;
         }
 
@@ -237,18 +246,55 @@ public class GameScreen implements Screen {
 
         batch.begin();
 
-        font.draw(batch,
-            "Score: " + score,
-            20, GameConfig.WORLD_HEIGHT - 20);
+        float margin = 35f;
+        float hudY = GameConfig.WORLD_HEIGHT - 35f;
+        String scoreText = "Score: " + score;
 
-        font.draw(batch,
-            "Lives: " + lives,
-            GameConfig.WORLD_WIDTH - 100, GameConfig.WORLD_HEIGHT - 20);
+        font.draw(
+            batch,
+            scoreText,
+            margin,
+            hudY
+        );
 
-        font.draw(batch,
-            "Level: " + level,
-            GameConfig.WORLD_WIDTH / 2 -30,
-            GameConfig.WORLD_HEIGHT -20);
+        String levelText = "Level: " + level;
+
+        hudLayout.setText(font, levelText);
+
+        float levelX = (GameConfig.WORLD_WIDTH - hudLayout.width) / 2f;
+
+        font.draw(
+            batch,
+            levelText,
+            levelX,
+            hudY
+        );
+
+        String livesText = "Lives: " + lives;
+
+        hudLayout.setText(font, livesText);
+
+        float livesX = (GameConfig.WORLD_WIDTH - margin - hudLayout.width);
+
+        font.draw(
+            batch,
+            livesText,
+            livesX,
+            hudY
+        );
+
+//        font.draw(batch,
+//            "Score: " + score,
+//            20, GameConfig.WORLD_HEIGHT - 20);
+//
+//        font.draw(batch,
+//            "Lives: " + lives,
+//            GameConfig.WORLD_WIDTH - 100, GameConfig.WORLD_HEIGHT - 20);
+//
+//        font.draw(batch,
+//            "Level: " + level,
+//            GameConfig.WORLD_WIDTH / 2 -30,
+//            GameConfig.WORLD_HEIGHT -20);
         batch.end();
 
         if(allBricksDestroyed()){
@@ -280,72 +326,105 @@ public class GameScreen implements Screen {
         }
     }
 
-    public void createBricks(){
-
-        float brickHeight = 40;
+    public void createBricks() {
 
         int columns = 10;
 
-        float margin = 100;
+        float brickHeight = 40;
         float gap = 12;
+        float sideMargin = 40;
 
-        int rows = switch (level){
-        case 1 -> 3;
-        case 2 -> 4;
-        case 3 -> 5;
-        default -> 3;
+        int rows = switch (level) {
+            case 1 -> 3;
+            case 2 -> 4;
+            case 3 -> 5;
+            default -> 3;
         };
 
-        float availableWidth = GameConfig.WORLD_WIDTH - margin * 2 - gap * (columns - 1);
-        float brickWidth = availableWidth / columns;
+        float availableWidth =
+            GameConfig.WALL_RIGHT
+                - GameConfig.WALL_LEFT
+                - sideMargin * 2
+                - gap * (columns - 1);
 
-        float startX = margin;
-        float startY = GameConfig.WORLD_HEIGHT - 150;
+        float brickWidth =
+            availableWidth / columns;
 
-        float totalWidth =
-            columns * brickWidth + (columns - 1) * gap;
+        float startX =
+            GameConfig.WALL_LEFT + sideMargin;
 
-        for(int row = 0; row < rows; row++){
+        float startY =
+            GameConfig.WALL_TOP - 100;
 
-            int textureType = row + 1;
+        for (int row = 0; row < rows; row++) {
 
-            int hitReqired = 1;
+            for (int column = 0; column < columns; column++) {
 
-            switch (level){
-                case 1:
-                    hitReqired = 1;
-                    break;
-                case 2:
-                if(row == 0){
-                    hitReqired = 2;
-                }
-                case 3:
-                    if(row == 0){
-                        hitReqired = 3;
-                    } else if (row == 1) {
-                        hitReqired = 2;
-                    }
-                    break;
-            }
-
-            for(int column = 0; column < columns; column++){
-
-                boolean createBrick = switch (level){
+                boolean createBrick = switch (level) {
                     case 1 -> true;
-                    case 2 -> (row + column) % 2 == 0;
-                    case 3 -> column >= row && column < columns - row;
+
+                    case 2 ->
+                        (row + column) % 2 == 0;
+
+                    case 3 ->
+                        column >= row
+                            && column < columns - row;
+
                     default -> true;
                 };
-                if(!createBrick){
+
+                if (!createBrick) {
                     continue;
                 }
 
-                float x = startX + column * (brickWidth + gap);
-                float y = startY - row * (brickHeight + gap);
+                float x =
+                    startX
+                        + column * (brickWidth + gap);
+
+                float y =
+                    startY
+                        - row * (brickHeight + gap);
+
+
+                int textureType;
+
+                switch (level) {
+
+                    case 1:
+                        textureType = (row % 3) + 1;
+                        break;
+
+                    case 2:
+                        if (row == 0) {
+                            textureType = 4;
+                        } else {
+                            textureType = (row % 3) + 1;
+                        }
+                        break;
+
+                    case 3:
+                        if (row == 0) {
+                            textureType = 5;
+                        } else if (row == 1) {
+                            textureType = 4;
+                        } else {
+                            textureType = (row % 3) + 1;
+                        }
+                        break;
+
+                    default:
+                        textureType = 1;
+                        break;
+                }
+
 
                 bricks.add(
                     new Brick(
-                      x, y, brickWidth, brickHeight, hitReqired, textureType
+                        x,
+                        y,
+                        brickWidth,
+                        brickHeight,
+                        textureType
                     )
                 );
             }
