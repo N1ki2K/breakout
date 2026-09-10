@@ -124,7 +124,7 @@ public class GameScreen implements Screen {
 
         score = 0;
         lives = 3;
-        level = 1;
+        level = 3;
 
         createBricks();
 
@@ -306,7 +306,9 @@ public class GameScreen implements Screen {
                 ball.increaceSpeed(50);
                 ball.reset();
             } else {
-                game.setScreen(new WinScreen(game));
+                game.setScreen(
+                    new WinScreen(game, score)
+                );
             }
             return;
         }
