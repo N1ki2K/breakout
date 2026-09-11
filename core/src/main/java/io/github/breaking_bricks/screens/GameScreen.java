@@ -1,6 +1,5 @@
 package io.github.breaking_bricks.screens;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
@@ -151,7 +150,6 @@ public class GameScreen implements Screen {
                 Texture.TextureFilter.Linear
             );
     }
-
 
     private Texture getBrickTexture(Brick brick){
         return switch (brick.getTextureType()){
@@ -304,18 +302,6 @@ public class GameScreen implements Screen {
             hudY
         );
 
-//        font.draw(batch,
-//            "Score: " + score,
-//            20, GameConfig.WORLD_HEIGHT - 20);
-//
-//        font.draw(batch,
-//            "Lives: " + lives,
-//            GameConfig.WORLD_WIDTH - 100, GameConfig.WORLD_HEIGHT - 20);
-//
-//        font.draw(batch,
-//            "Level: " + level,
-//            GameConfig.WORLD_WIDTH / 2 -30,
-//            GameConfig.WORLD_HEIGHT -20);
         batch.end();
 
         if(allBricksDestroyed()){
@@ -408,7 +394,6 @@ public class GameScreen implements Screen {
                     startY
                         - row * (brickHeight + gap);
 
-
                 int textureType;
 
                 switch (level) {
@@ -439,7 +424,6 @@ public class GameScreen implements Screen {
                         textureType = 1;
                         break;
                 }
-
 
                 bricks.add(
                     new Brick(
