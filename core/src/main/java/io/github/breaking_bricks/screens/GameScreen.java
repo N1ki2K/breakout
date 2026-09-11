@@ -3,6 +3,7 @@ package io.github.breaking_bricks.screens;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.Input;
@@ -120,15 +121,35 @@ public class GameScreen implements Screen {
         shapeRenderer = new ShapeRenderer();
 
         batch = new SpriteBatch();
-        font = new BitmapFont();
 
         score = 0;
         lives = 3;
-        level = 3;
+        level = 1;
 
         createBricks();
 
         debugRenderer = new ShapeRenderer();
+
+        FreeTypeFontGenerator generator =
+            new FreeTypeFontGenerator(
+                Gdx.files.internal("fonts/Inter_18pt-Regular.ttf")
+            );
+
+        FreeTypeFontGenerator.FreeTypeFontParameter parameter =
+            new FreeTypeFontGenerator.FreeTypeFontParameter();
+
+        parameter.size = 36;
+
+        font = generator.generateFont(parameter);
+
+        generator.dispose();
+
+        font.getRegion()
+            .getTexture()
+            .setFilter(
+                Texture.TextureFilter.Linear,
+                Texture.TextureFilter.Linear
+            );
     }
 
 
