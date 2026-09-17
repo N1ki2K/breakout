@@ -110,4 +110,15 @@ public class Ball {
     public void increaceSpeed(float amount) {
         speed += amount;
     }
+
+    public float getDx() {
+        return dx;
+    }
+
+    public float getSpeed() {
+        return speed;
+    }
+
 }
+
+

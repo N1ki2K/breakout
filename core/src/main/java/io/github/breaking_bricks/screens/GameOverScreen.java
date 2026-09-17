@@ -114,7 +114,7 @@ public class GameOverScreen implements Screen{
 
         batch.setProjectionMatrix(camera.combined);
 
-        if(Gdx.input.isKeyPressed(Input.Keys.R)){
+        if(Gdx.input.isKeyJustPressed(Input.Keys.R)){
              game.setScreen(new GameScreen(game));
              return;
         }
