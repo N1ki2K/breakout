@@ -1,0 +1,13 @@
+# Breakout orientation template contract
+Reference: C:/Users/Nikola/Downloads/Breakout_Validation.docx
+SHA256: 607cc88611ca8663f45cfb6c5760e435ff0e2c159acaa280243a2bac90daa63d
+Reference render: reference/reference.pdf and page-1.png to page-5.png. Five pages, one A4 portrait section.
+Page geometry: 11906 x 16838 twips; margins 1134 twips all sides; header and footer 708 twips. Single column; different first-page header/footer.
+Typography: Calibri 11 pt body; paragraph after 8 pt. Cover Breakout 30 pt bold centered; subtitle 14 pt centered, before 6 pt after 35 pt; author 14 pt centered, before 6 pt after 35 pt; institution 11 pt centered before 50 pt. Leading spacer before 80 pt. Heading1 15 pt bold, before 18 pt after 9 pt, direct auto/black color. TOC1 Calibri 11 with after 5 pt and right dot leader at 9628 twips.
+Components: Cover retained with Orientation subtitle; separate contents page; numbered body sections; gray 8 pt right header updated to Breakout - Orientation; centered gray 9 pt PAGE footer retained.
+Editable slots: word/document.xml body child 2 subtitle; children 7 and 9-22 replaced by orientation TOC and body. Child1 uses Title style with unchanged visible typography. Body cover children0-6 and page break child8 retained; sectPr preserved. word/header1.xml text Validation replaced by Orientation.
+Content flow: cover, contents, introduction and Game Development and Interactive Media on page3, Software Design and Engineering and Semester2 reflection on page4. Reuse heading and body patterns, with short bold paragraph labels for project relation, careers, interest and Semester2 choice. Remove validation-only tables, prose and bookmarks from replaced body; preserve all package dependencies. No source claims of testing copied.
+Reflection: User states Software Design and Engineering interests them most. Other subjects treated as possible interests conditional on enjoying relevant work; no invented personal experience.
+Package preservation: package_inventory.json covers every part. Only document.xml, header1.xml and settings.xml editable. Other parts remain byte-for-byte. Word field refresh performed on temporary copy and only refreshed document.xml transplanted.
+Fidelity gate: compare cover and contents patterns to reference; verify all final pages and TOC page numbers; retain section geometry and furniture. Target4 pages because content differs from reference5. Source hash must remain unchanged.
+Rendering exception: packaged render_docx.py was attempted and failed because no bundled LibreOffice exists for Windows. Microsoft Word PDF export and bundled pypdfium2 are used for equivalent page-image visual QA.
